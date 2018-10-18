@@ -15,7 +15,6 @@ import EnableBioAuth from '../enableBioAuth';
 import DisableBioAuth from '../disableBioAuth';
 import PassphraseBackup from '../passphraseBackup';
 import styles from './styles';
-import MenuIcon from './menuIcon';
 import Bg from '../headerBackground';
 import tabBarOptions from './tabBarOptions';
 import { colors } from '../../constants/styleGuide';
@@ -30,38 +29,43 @@ const SettingButton = ({ navigation }) =>
     style={styles.settings}
     color={colors.white} />;
 
-const placeHolderButton = <IconButton color='transparent' icon='back'/>;
+// const placeHolderButton = <IconButton color='transparent' icon='back'/>;
 // eslint-disable-next-line new-cap
-const Tabs = createBottomTabNavigator({
-  OwnWallet: {
-    screen: OwnWallet,
-    navigationOptions: ({ navigation }) => ({
-      headerRight: <SettingButton navigation={navigation} />,
-      headerLeft: placeHolderButton,
-      headerTitle: <Logo />,
-      tabBarLabel: 'Wallet',
-      tabBarIcon: ({ focused }) => <MenuIcon name='home' focused={focused} />, //eslint-disable-line
-    }),
-  },
-  Send: {
-    screen: Send,
-    navigationOptions: ({ navigation }) => ({
-      headerRight: <SettingButton navigation={navigation} />,
-      headerTitle: <Logo />,
-      tabBarLabel: 'Send',
-      tabBarIcon: ({ focused }) => <MenuIcon name='send' focused={focused} />, //eslint-disable-line
-    }),
-  },
-  Request: {
-    screen: Request,
-    navigationOptions: ({ navigation }) => ({
-      headerRight: <SettingButton navigation={navigation} />,
-      headerLeft: placeHolderButton,
-      headerTitle: <Logo />,
-      tabBarLabel: 'Request',
-      tabBarIcon: ({ focused }) => <MenuIcon name='request' focused={focused} />, //eslint-disable-line
-    }),
-  },
+
+
+const TabScreens = {
+  OwnWallet,
+  // OwnWallet: {
+  //   screen: OwnWallet,
+  // navigationOptions: ({ navigation }) => ({
+  //   headerRight: <SettingButton navigation={navigation} />,
+  //   headerLeft: placeHolderButton,
+  //   headerTitle: <Logo />,
+  //   tabBarLabel: 'Wallet',
+  //   tabBarIcon: ({ focused }) => <MenuIcon name='home' focused={focused} />,
+  // }),
+  // },
+  Send,
+  // Send: {
+  //   screen: Send,
+  //   navigationOptions: ({ navigation }) => ({
+  //     headerRight: <SettingButton navigation={navigation} />,
+  //     headerTitle: <Logo />,
+  //     tabBarLabel: 'Send',
+  //     tabBarIcon: ({ focused }) => <MenuIcon name='send' focused={focused} />,
+  //   }),
+  // },
+  Request,
+  // Request: {
+  //   screen: Request,
+  //   navigationOptions: ({ navigation }) => ({
+  //     headerRight: <SettingButton navigation={navigation} />,
+  //     headerLeft: placeHolderButton,
+  //     headerTitle: <Logo />,
+  //     tabBarLabel: 'Request',
+  //     tabBarIcon: ({ focused }) => <MenuIcon name='request' focused={focused} />,
+  //   }),
+  // },
   // Explore: {
   //   screen: Explore,
   //   navigationOptions: {
@@ -71,11 +75,22 @@ const Tabs = createBottomTabNavigator({
   // focused={focused} />, //eslint-disable-line
   //   },
   // },
-}, {
+};
+const Tabs = createBottomTabNavigator(TabScreens, {
   tabBarOptions,
   initialRouteName: 'OwnWallet',
 });
 
+Tabs.navigationOptions = (configProps) => { //eslint-disable-line
+  console.log('configProps : ', configProps);
+  const focusedRouteName = configProps.navigation.state
+    .routes[configProps.navigation.state.index].routeName;
+  // console.log(focusedRouteName);
+  const childNavigationOptions = TabScreens[focusedRouteName].navigationOptions;
+  if (childNavigationOptions) {
+    return childNavigationOptions(configProps);
+  }
+};
 
 // eslint-disable-next-line new-cap
 export default StackNavigator(
@@ -94,19 +109,19 @@ export default StackNavigator(
     },
     Main: {
       screen: Tabs,
-      navigationOptions: ({ navigation }) => ({
-        headerBackground: <Bg />,
-        headerTitle: <Logo />,
-        headerRight: <SettingButton navigation={navigation} />,
-        headerStyle: {
-          backgroundColor: 'transparent',
-          overflow: 'hidden',
-        },
-        headerTitleStyle: {
-          textAlign: 'center',
-          flex: 1,
-        },
-      }),
+      // navigationOptions: ({ navigation }) => ({
+      // headerBackground: <Bg />,
+      // headerTitle: <Logo />,
+      // headerRight: <SettingButton navigation={navigation} />,
+      // headerStyle: {
+      //   backgroundColor: 'transparent',
+      //   overflow: 'hidden',
+      // },
+      // headerTitleStyle: {
+      //   textAlign: 'center',
+      //   flex: 1,
+      // },
+      // }),
     },
     Wallet: {
       screen: Wallet,

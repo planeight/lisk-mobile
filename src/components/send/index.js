@@ -8,6 +8,9 @@ import Result from './result';
 import styles from './styles';
 import { IconButton } from '../toolBox/button';
 import { colors } from '../../constants/styleGuide';
+import MenuIcon, { SettingButton } from '../router/menuIcon';
+import Bg from '../headerBackground';
+import Logo from '../router/logo';
 
 @connect(state => ({
   account: state.accounts.active,
@@ -15,16 +18,25 @@ import { colors } from '../../constants/styleGuide';
 class Send extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
+    console.log(params);
     return {
+      headerBackground: <Bg />,
+      headerRight: <SettingButton navigation={navigation} />,
+      headerTitle: <Logo />,
+      tabBarLabel: 'Send',
+      tabBarIcon: ({ focused }) => <MenuIcon name='send' focused={focused} />, //eslint-disable-line
       tabBarVisible: !(params && params.tabBar),
+      headerStyle: {
+        overflow: 'hidden',
+      },
       headerLeft: (params && params.showButtonLeft) ? <IconButton
-      icon='back'
-      title=''
-      onPress={() => {
-        params.action();
-      }}
-      style={styles.back}
-      color={colors.white} /> : <IconButton color='transparent' icon='back'/>,
+        icon='back'
+        title=''
+        onPress={() => {
+          params.action();
+        }}
+        style={styles.back}
+        color={colors.white} /> : null,
     };
   };
   componentDidMount() {

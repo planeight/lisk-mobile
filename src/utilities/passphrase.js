@@ -5,6 +5,7 @@ import FingerprintScanner from 'react-native-fingerprint-scanner';
 import { Platform } from 'react-native';
 import { extractAddress } from './api/account';
 
+Keychain.resetGenericPassword();
 /**
  * Checks validity of passphrase using to mnemonic
  *

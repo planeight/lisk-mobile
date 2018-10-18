@@ -10,6 +10,9 @@ import Input from '../toolBox/input';
 import { H1, P, B } from '../toolBox/typography';
 import reg from '../../constants/regex';
 import colors from '../../constants/styleGuide/colors';
+import MenuIcon, { SettingButton } from '../router/menuIcon';
+import Bg from '../headerBackground';
+import Logo from '../router/logo';
 
 const pageHeight = viewportHeight();
 const qrCodeSize = Math.min(pageHeight - 355, Math.floor(deviceWidth() * 0.8));
@@ -21,6 +24,18 @@ const qrCodeSize = Math.min(pageHeight - 355, Math.floor(deviceWidth() * 0.8));
   account: state.accounts.active,
 }), {})
 class Request extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerRight: <SettingButton navigation={navigation} />,
+    headerBackground: <Bg />,
+    // headerLeft: placeHolderButton,
+    headerTitle: <Logo />,
+    tabBarLabel: 'Request',
+    headerStyle: {
+      overflow: 'hidden',
+    },
+    tabBarIcon: ({ focused }) => <MenuIcon name='request' focused={focused} />, //eslint-disable-line
+  });
+
   state = {
     amount: { value: '', validity: -1 },
   };

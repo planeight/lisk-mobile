@@ -10,6 +10,9 @@ import Loading from '../transactions/loading';
 import { viewportHeight } from '../../utilities/device';
 import InfiniteScrollView from '../infiniteScrollView';
 import styles from './styles';
+import MenuIcon, { SettingButton } from '../router/menuIcon';
+import Bg from '../headerBackground';
+import Logo from '../router/logo';
 
 const itemHeight = 90;
 const summaryHeight = 250;
@@ -31,6 +34,17 @@ const summaryHeight = 250;
   updateTransactions: blockUpdatedAction,
 })
 class Wallet extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerRight: <SettingButton navigation={navigation} />,
+    // headerLeft: placeHolderButton,
+    headerBackground: <Bg />,
+    headerTitle: <Logo />,
+    tabBarLabel: 'Wallet',
+    tabBarIcon: ({ focused }) => <MenuIcon name='home' focused={focused} />, //eslint-disable-line
+    headerStyle: {
+      overflow: 'hidden',
+    },
+  });
   state = {
     scrollY: new Animated.Value(0),
     theme: 'loading',
