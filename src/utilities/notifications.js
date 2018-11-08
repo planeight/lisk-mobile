@@ -12,10 +12,11 @@ export const initPushNotifications = () => {
   });
 };
 
-export const sendNotifications = (message) => {
+export const sendNotifications = (message, title) => {
   PushNotification.localNotificationSchedule({
     foreground: true,
     message,
+    title,
     date: new Date(Date.now() + (2 * 1000)),
   });
 };
