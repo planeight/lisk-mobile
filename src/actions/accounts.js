@@ -3,6 +3,8 @@ import { retrieveAccounts, storeAccounts } from '../utilities/storage';
 import { getAccount, extractAddress } from '../utilities/api/account';
 import { loadingStarted, loadingFinished } from './loading';
 import { getTransactions } from '../utilities/api/transactions';
+import { sendNotifications } from '../utilities/notifications';
+import { fromRawLsk } from '../utilities/conversions';
 
 /**
  * Stores the given accounts data in AsyncStorage
@@ -165,6 +167,18 @@ export const blockUpdated = () => (dispatch, getState) => {
     senderIdOrRecipientId: address,
     offset: 0,
   }).then((response) => {
+    response.data
+      .filter(item => (
+        confirmed.length === 0 ||
+        ((item.timestamp > confirmed[0].timestamp) && item.senderId !== item.recipientId)
+      ))
+      .forEach((item) => {
+        const title = (item.senderId === address) ? 'LSK tokens sent.' : 'LSK tokens received.';
+        const message = (item.senderId === address) ?
+          `You have sent ${fromRawLsk(item.amount)} LSK to ${item.recipientId}.` :
+          `You have received ${fromRawLsk(item.amount)} LSK from ${item.senderId}.`;
+        sendNotifications(message, title);
+      });
     const newTransactions = response.data.filter(tx => tx.timestamp > lastTx.timestamp);
     if (newTransactions.length) {
       dispatch({
